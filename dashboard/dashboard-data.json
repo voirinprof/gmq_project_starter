@@ -1,0 +1,143 @@
+{
+  "project_name": "Mon petit projet de programmation",
+  "phase": "Cadrage du projet",
+  "progress": 0,
+  "steps": [
+    {
+      "id": "M-01",
+      "name": "Cadrage du projet",
+      "status": "En cours",
+      "substeps": [
+        {
+          "name": "Définition du projet",
+          "substeps": [
+            { "id": "T-001", "name": "Titre du projet", "status": "À faire" },
+            { "id": "T-002", "name": "Contexte et besoin", "status": "À faire" },
+            { "id": "T-003", "name": "Problématique", "status": "À faire" },
+            { "id": "T-004", "name": "Objectifs", "status": "À faire" },
+            { "id": "T-005", "name": "Périmètre", "status": "À faire" },
+            { "id": "T-006", "name": "Résultats attendus", "status": "À faire" },
+            { "id": "T-007", "name": "Contraintes et questions ouvertes", "status": "À faire" }
+          ]
+        },
+        {
+          "name": "Analyse des données",
+          "substeps": [
+            { "id": "T-008", "name": "Sources des données", "status": "À faire" },
+            { "id": "T-009", "name": "Description et adéquation", "status": "À faire" },
+            { "id": "T-010", "name": "Système de coordonnées et unités", "status": "À faire" },
+            { "id": "T-011", "name": "Qualité, limites et risques", "status": "À faire" }
+          ]
+        },
+        {
+          "name": "Conception de la solution",
+          "substeps": [
+            { "id": "T-012", "name": "Résultats attendus", "status": "À faire" },
+            { "id": "T-013", "name": "Flux de traitement", "status": "À faire" },
+            { "id": "T-014", "name": "Tests et vérifications", "status": "À faire" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M-02",
+      "name": "Développement",
+      "status": "À faire",
+      "substeps": [
+        {
+          "name": "Préparation technique",
+          "substeps": [
+            { "id": "T-015", "name": "Configurer l’environnement et les outils nécessaires", "status": "À faire" },
+            { "id": "T-016", "name": "Documenter l’installation et les commandes d’exécution", "status": "À faire" }
+          ]
+        },
+        {
+          "name": "Mise en œuvre",
+          "substeps": [
+            { "id": "T-017", "name": "Mettre en place la structure du code", "status": "À faire" },
+            { "id": "T-018", "name": "Réaliser les traitements prévus dans le flux", "status": "À faire" },
+            { "id": "T-019", "name": "Produire les résultats intermédiaires et finaux", "status": "À faire" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M-03",
+      "name": "Tests et validation",
+      "status": "À faire",
+      "substeps": [
+        {
+          "name": "Tests du code et des traitements",
+          "substeps": [
+            { "id": "T-020", "name": "Tester les fonctions et les étapes de traitement", "status": "À faire" },
+            { "id": "T-021", "name": "Vérifier les formats des données en entrée et en sortie", "status": "À faire" }
+          ]
+        },
+        {
+          "name": "Vérifications géomatiques",
+          "substeps": [
+            { "id": "T-022", "name": "Vérifier les CRS, unités et géométries", "status": "À faire" },
+            { "id": "T-023", "name": "Contrôler la cohérence des résultats avec les objectifs", "status": "À faire" }
+          ]
+        },
+        {
+          "name": "Reproductibilité",
+          "substeps": [
+            { "id": "T-024", "name": "Rejouer le traitement en suivant les instructions du projet", "status": "À faire" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M-04",
+      "name": "Documentation et restitution",
+      "status": "À faire",
+      "substeps": [
+        {
+          "name": "Documentation",
+          "substeps": [
+            { "id": "T-025", "name": "Documenter les méthodes, paramètres et hypothèses", "status": "À faire" },
+            { "id": "T-026", "name": "Documenter les sources, licences et limites des données", "status": "À faire" }
+          ]
+        },
+        {
+          "name": "Restitution",
+          "substeps": [
+            { "id": "T-027", "name": "Préparer les livrables prévus pour le projet", "status": "À faire" },
+            { "id": "T-028", "name": "Présenter les résultats et leurs limites", "status": "À faire" }
+          ]
+        }
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "D-001",
+      "date": "Exemple",
+      "decision": "EXEMPLE FICTIF — Regrouper les couches préparées dans un GeoPackage",
+      "status": "Confirmée",
+      "reason": "Illustration d’un choix de format de stockage : un GeoPackage peut regrouper plusieurs couches dans un fichier. À confirmer selon les données, les usages et les outils du projet."
+    },
+    {
+      "id": "D-002",
+      "date": "Exemple",
+      "decision": "EXEMPLE FICTIF — Choisir un traitement scripté ou un outil SIG",
+      "status": "En attente",
+      "reason": "À trancher après avoir clarifié les traitements, les compétences disponibles et les besoins de reproductibilité."
+    },
+    {
+      "id": "D-003",
+      "date": "Exemple",
+      "decision": "EXEMPLE FICTIF — Choisir le CRS de travail pour l’analyse",
+      "status": "Reportée",
+      "reason": "À réexaminer lorsque le territoire, les données disponibles et les mesures à produire seront confirmés."
+    },
+    {
+      "id": "D-004",
+      "date": "Exemple",
+      "decision": "EXEMPLE FICTIF — Automatiser les mises à jour des données",
+      "status": "Suspendue",
+      "reason": "En attente d’informations sur la fréquence de mise à jour des sources et les conditions d’accès avant de définir l’architecture."
+    }
+  ]
+}

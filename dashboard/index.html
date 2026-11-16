@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tableau de bord du projet</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: system-ui, sans-serif;
+      color: #172b4d;
+      background: #f3f6fa;
+    }
+
+    body {
+      margin: 0;
+      padding: 2rem 1rem;
+    }
+
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin-bottom: 0.4rem;
+      font-size: clamp(1.7rem, 5vw, 2.4rem);
+    }
+
+    .phase {
+      margin-top: 0;
+      color: #52647a;
+    }
+
+    .card {
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      border: 1px solid #d8e0ea;
+      border-radius: 0.75rem;
+      background: #fff;
+      box-shadow: 0 0.25rem 1rem #172b4d0d;
+    }
+
+    h2 {
+      margin: 0 0 1rem;
+      font-size: 1.2rem;
+    }
+
+    .progress-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.65rem;
+      font-weight: 600;
+    }
+
+    progress {
+      width: 100%;
+      height: 1rem;
+      accent-color: #247a62;
+    }
+
+    .step-list,
+    .decision-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .step-item {
+      padding: 0.6rem 0;
+    }
+
+    .step-item + .step-item,
+    .decision-item + .decision-item {
+      border-top: 1px solid #e6ebf1;
+    }
+
+    .step-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .milestone-accordion > summary {
+      cursor: pointer;
+    }
+
+    .milestone-accordion > summary:focus-visible {
+      outline: 2px solid #247a62;
+      outline-offset: 0.25rem;
+    }
+
+    .milestone-accordion[open] > summary {
+      margin-bottom: 0.25rem;
+    }
+
+    .step-label {
+      display: flex;
+      align-items: baseline;
+      gap: 0.55rem;
+    }
+
+    .tracking-id {
+      flex: 0 0 auto;
+      color: #64748b;
+      font-family: ui-monospace, monospace;
+      font-size: 0.8rem;
+    }
+
+    .step-group > .step-main {
+      font-weight: 600;
+    }
+
+    .substep-list {
+      margin: 0.25rem 0 0 0.5rem;
+      padding-left: 1rem;
+      border-left: 1px solid #e6ebf1;
+    }
+
+    .substep-list .step-item {
+      padding: 0.45rem 0 0.45rem 0.5rem;
+    }
+
+    .step-state {
+      flex: 0 0 auto;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      background: #edf1f5;
+      color: #52647a;
+      font-size: 0.85rem;
+    }
+
+    .step-state--active {
+      background: #fff3d6;
+      color: #765300;
+    }
+
+    .step-state--done {
+      background: #e2f3ec;
+      color: #176345;
+    }
+
+    .decision-item {
+      padding: 0.85rem 0;
+    }
+
+    .decision-group + .decision-group {
+      margin-top: 1.25rem;
+    }
+
+    .decision-group h3 {
+      margin: 0 0 0.35rem;
+      font-size: 1rem;
+    }
+
+    .decision-date {
+      color: #52647a;
+      font-size: 0.9rem;
+    }
+
+    .decision-status {
+      display: inline-block;
+      margin-left: 0.35rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      background: #edf1f5;
+      color: #52647a;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .decision-status--confirmed {
+      background: #e2f3ec;
+      color: #176345;
+    }
+
+    .decision-status--pending {
+      background: #fff3d6;
+      color: #765300;
+    }
+
+    .decision-status--deferred {
+      background: #e8f0fb;
+      color: #28578c;
+    }
+
+    .decision-status--suspended {
+      background: #edf1f5;
+      color: #52647a;
+    }
+
+    .decision-reason {
+      margin: 0.35rem 0 0;
+    }
+
+    .empty-state {
+      color: #52647a;
+    }
+
+    .status {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid #d8e0ea;
+      min-height: 1.5em;
+      color: #52647a;
+    }
+
+    .status.error {
+      color: #a12525;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1 id="project-name">Tableau de bord du projet</h1>
+      <p class="phase" id="project-phase">En attente des données du projet</p>
+    </header>
+
+    <section class="card" aria-labelledby="progress-heading">
+      <div class="progress-heading">
+        <span id="progress-heading">Progression</span>
+        <span id="progress-label">—</span>
+      </div>
+      <progress id="project-progress" max="100" value="0" aria-label="Progression du projet"></progress>
+    </section>
+
+    <section class="card" aria-labelledby="steps-heading">
+      <h2 id="steps-heading">Étapes du projet</h2>
+      <ol class="step-list" id="project-steps"></ol>
+    </section>
+
+    <section class="card" aria-labelledby="decisions-heading">
+      <h2 id="decisions-heading">Décisions structurantes</h2>
+      <div id="project-decisions"></div>
+    </section>
+
+    <p class="status" id="load-status" role="status" aria-live="polite">
+      Chargement des données du projet…
+    </p>
+  </main>
+
+  <script>
+    const projectName = document.getElementById("project-name");
+    const projectPhase = document.getElementById("project-phase");
+    const projectProgress = document.getElementById("project-progress");
+    const progressLabel = document.getElementById("progress-label");
+    const projectSteps = document.getElementById("project-steps");
+    const projectDecisions = document.getElementById("project-decisions");
+    const loadStatus = document.getElementById("load-status");
+    const stepStatusClasses = {
+      "À faire": "",
+      "En cours": "step-state--active",
+      "Terminé": "step-state--done"
+    };
+    const decisionStatusClasses = {
+      "Confirmée": "decision-status--confirmed",
+      "En attente": "decision-status--pending",
+      "Reportée": "decision-status--deferred",
+      "Suspendue": "decision-status--suspended"
+    };
+    const trackingIds = new Set();
+
+    function validateId(id, pattern, label) {
+      if (typeof id !== "string" || !pattern.test(id)) {
+        throw new Error(`${label} a un identifiant invalide.`);
+      }
+      if (trackingIds.has(id)) {
+        throw new Error(`L’identifiant « ${id} » est utilisé plusieurs fois.`);
+      }
+      trackingIds.add(id);
+    }
+
+    function setStatus(message, isError = false) {
+      loadStatus.textContent = message;
+      loadStatus.classList.toggle("error", isError);
+    }
+
+    function renderDashboard(data) {
+      if (data === null || typeof data !== "object" || Array.isArray(data)) {
+        throw new Error("Le JSON doit contenir un objet.");
+      }
+
+      if (typeof data.project_name !== "string" || !data.project_name.trim()) {
+        throw new Error("Le champ « project_name » doit être une chaîne non vide.");
+      }
+      if (typeof data.phase !== "string" || !data.phase.trim()) {
+        throw new Error("Le champ « phase » doit être une chaîne non vide.");
+      }
+      if (typeof data.progress !== "number" || !Number.isFinite(data.progress) ||
+          data.progress < 0 || data.progress > 100) {
+        throw new Error("Le champ « progress » doit être un nombre entre 0 et 100.");
+      }
+      if (!Array.isArray(data.steps)) {
+        throw new Error("Le champ « steps » doit être une liste d’étapes.");
+      }
+      if (!Array.isArray(data.decisions)) {
+        throw new Error("Le champ « decisions » doit être une liste.");
+      }
+
+      trackingIds.clear();
+
+      function validateStep(step, label, level = 0) {
+        if (step === null || typeof step !== "object" || Array.isArray(step) ||
+            typeof step.name !== "string" || !step.name.trim()) {
+          throw new Error(`${label} doit avoir un nom.`);
+        }
+
+        const hasSubsteps = Object.hasOwn(step, "substeps");
+        if (hasSubsteps && (!Array.isArray(step.substeps) || step.substeps.length === 0)) {
+          throw new Error(`${label} doit contenir une liste de sous-étapes valide.`);
+        }
+        if (level === 0) {
+          validateId(step.id, /^M-\d{2,}$/, label);
+        } else if (!hasSubsteps) {
+          validateId(step.id, /^T-\d{3,}$/, label);
+        } else if (step.id !== undefined) {
+          throw new Error(`${label} est un groupe et ne doit pas avoir d’identifiant.`);
+        }
+        if (level === 0 || !hasSubsteps || step.status !== undefined) {
+          if (!Object.hasOwn(stepStatusClasses, step.status)) {
+            throw new Error(`${label} doit avoir un statut valide.`);
+          }
+        }
+        if (hasSubsteps) {
+          step.substeps.forEach((substep, index) =>
+            validateStep(substep, `${label}, sous-étape ${index + 1}`, level + 1));
+        }
+      }
+
+      data.steps.forEach((step, index) => validateStep(step, `L’étape ${index + 1}`));
+      data.decisions.forEach((decision, index) => {
+        if (decision === null || typeof decision !== "object" || Array.isArray(decision) ||
+            typeof decision.date !== "string" || !decision.date.trim() ||
+            typeof decision.decision !== "string" || !decision.decision.trim() ||
+            typeof decision.reason !== "string" || !decision.reason.trim()) {
+          throw new Error(`La décision ${index + 1} doit avoir une date, un libellé et une raison.`);
+        }
+        if (!Object.hasOwn(decisionStatusClasses, decision.status)) {
+          throw new Error(`La décision ${index + 1} doit avoir un statut valide.`);
+        }
+        validateId(decision.id, /^D-\d{3,}$/, `La décision ${index + 1}`);
+      });
+
+      projectName.textContent = data.project_name;
+      projectPhase.textContent = data.phase;
+      projectProgress.value = data.progress;
+      progressLabel.textContent = `${data.progress}%`;
+
+      projectSteps.replaceChildren();
+      function createStepElement(step, level = 0) {
+        const item = document.createElement("li");
+        const hasSubsteps = Array.isArray(step.substeps);
+        item.className = `step-item ${hasSubsteps ? "step-group" : "step-leaf"}`;
+
+        const main = document.createElement("div");
+        main.className = "step-main";
+
+        const label = document.createElement("span");
+        label.className = "step-label";
+        if (step.id) {
+          const id = document.createElement("span");
+          id.className = "tracking-id";
+          id.textContent = step.id;
+          label.append(id);
+        }
+
+        const name = document.createElement("span");
+        name.textContent = step.name;
+        if (level === 0 && hasSubsteps) {
+          name.title = "Cliquer pour voir les sous-étapes";
+        }
+        label.append(name);
+        main.append(label);
+
+        if (step.status !== undefined) {
+          const status = document.createElement("span");
+          status.className = `step-state ${stepStatusClasses[step.status]}`;
+          status.textContent = step.status;
+          main.append(status);
+        }
+
+        let substepList;
+        if (hasSubsteps) {
+          substepList = document.createElement("ol");
+          substepList.className = "step-list substep-list";
+          step.substeps.forEach((substep) =>
+            substepList.append(createStepElement(substep, level + 1)));
+        }
+
+        if (level === 0 && hasSubsteps) {
+          const accordion = document.createElement("details");
+          accordion.className = "milestone-accordion";
+
+          const summary = document.createElement("summary");
+          summary.className = "step-main";
+          summary.append(...main.childNodes);
+
+          accordion.addEventListener("toggle", () => {
+            if (!accordion.open) {
+              return;
+            }
+            projectSteps.querySelectorAll("details.milestone-accordion[open]").forEach((openAccordion) => {
+              if (openAccordion !== accordion) {
+                openAccordion.open = false;
+              }
+            });
+          });
+
+          accordion.append(summary, substepList);
+          item.append(accordion);
+        } else {
+          item.append(main);
+          if (substepList) {
+            item.append(substepList);
+          }
+        }
+
+        return item;
+      }
+      data.steps.forEach((step) => projectSteps.append(createStepElement(step)));
+
+      projectDecisions.replaceChildren();
+      function createDecisionGroup(title, decisions, emptyMessage) {
+        const group = document.createElement("div");
+        group.className = "decision-group";
+
+        const heading = document.createElement("h3");
+        heading.textContent = title;
+
+        const list = document.createElement("ul");
+        list.className = "decision-list";
+        if (decisions.length === 0) {
+          const emptyState = document.createElement("li");
+          emptyState.className = "empty-state";
+          emptyState.textContent = emptyMessage;
+          list.append(emptyState);
+        } else {
+          decisions.forEach((decision) => {
+            const item = document.createElement("li");
+            item.className = "decision-item";
+
+            const id = document.createElement("span");
+            id.className = "tracking-id";
+            id.textContent = `${decision.id} · `;
+
+            const heading = document.createElement("strong");
+            heading.textContent = decision.decision;
+
+            const status = document.createElement("span");
+            status.className = `decision-status ${decisionStatusClasses[decision.status]}`;
+            status.textContent = decision.status;
+
+            const date = document.createElement("span");
+            date.className = "decision-date";
+            date.textContent = ` — ${decision.date}`;
+
+            const reason = document.createElement("p");
+            reason.className = "decision-reason";
+            reason.textContent = decision.reason;
+
+            item.append(id, heading, status, date, reason);
+            list.append(item);
+          });
+        }
+        group.append(heading, list);
+        projectDecisions.append(group);
+      }
+
+      createDecisionGroup(
+        "Confirmées",
+        data.decisions.filter((decision) => decision.status === "Confirmée"),
+        "Aucune décision confirmée."
+      );
+      createDecisionGroup(
+        "À suivre",
+        data.decisions.filter((decision) => decision.status !== "Confirmée"),
+        "Aucune décision en attente, reportée ou suspendue."
+      );
+
+      setStatus("Tableau de bord chargé.");
+    }
+
+    async function loadDashboard() {
+      if (location.protocol === "file:") {
+        setStatus("Ouvrez cette page avec l’extension Live Server de VS Code pour charger les données.", true);
+        return;
+      }
+
+      try {
+        const response = await fetch("./dashboard-data.json");
+        if (!response.ok) {
+          throw new Error(`Erreur HTTP ${response.status}`);
+        }
+        renderDashboard(await response.json());
+      } catch (error) {
+        setStatus(`Impossible de charger dashboard-data.json : ${error.message}`, true);
+      }
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+# Keep the data directory structure without versioning data files.
+/data/*
+!/data/raw/
+!/data/processed/
+!/data/outputs/
+/data/raw/*
+!/data/raw/.gitkeep
+/data/processed/*
+!/data/processed/.gitkeep
+/data/outputs/*
+!/data/outputs/.gitkeep
+
+# Local environment variables and credentials.
+.env
+.env.*
+!.env.example
+!.env.*.example
+credentials.*
+secrets.*
+
+# Private keys and certificate bundles.
+*.key
+*.pem
+*.p12
+*.pfx
